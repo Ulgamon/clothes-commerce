@@ -22,6 +22,9 @@ const CartContext = createContext({
     toggleDropdown: () => {},
     cartItems: [],
     addItemToCart: (productToAdd) => {},
+    decrement: (productToDecrement) => {},
+    removeItemFromCart: (productToRemove) => {},
+    total: 0,
     cartCount: 0,
 });
 
@@ -30,6 +33,7 @@ export const CartContextProvider = ({children}) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [cartCount, setCartCount] = useState(0);
+    const [total, setTotal] = useState(0);
 
     const addItemToCart = (productToAdd) => {
         setCartItems(currentCartItems => addCartItem(currentCartItems, productToAdd));
@@ -37,18 +41,40 @@ export const CartContextProvider = ({children}) => {
 
     useEffect(() => {
         const newCartCount = cartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
+        const newTotal = cartItems.reduce((total, cartItem) => total + cartItem.quantity * cartItem.price, 0);
         setCartCount(newCartCount);
+        setTotal(newTotal);
     }, [cartItems])
 
     const toggleDropdown = () => {
         setShowDropdown(prevState => !prevState);
     };
 
+    const decrement = (productToDecrement) => {
+        const itemToDecrement = cartItems.find(item => item.id === productToDecrement.id);
+
+        if (itemToDecrement && itemToDecrement.quantity > 1) {
+            setCartItems(currentCartItems => currentCartItems.map(item => item.id === itemToDecrement.id 
+                ? {...item, quantity: item.quantity-- } 
+                : item));
+        }
+        else if (itemToDecrement && itemToDecrement.quantity === 1) {
+            removeItemFromCart(itemToDecrement);
+        }
+    };
+
+    const removeItemFromCart = (productToRemove) => {
+        setCartItems(currentCartItems => currentCartItems.filter(item => item.id !== productToRemove.id));
+    }
+
     const value = {
         showDropdown,
         toggleDropdown,
         cartItems,
         addItemToCart,
+        decrement,
+        removeItemFromCart,
+        total,
         cartCount,
     };
 
