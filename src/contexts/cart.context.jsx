@@ -3,9 +3,8 @@ import { createContext, useEffect, useState } from "react";
 const addCartItem = (cartItems, productToAdd) => {
     // find if cartItems contains productToAdd
     const index = cartItems.findIndex(element => element.id === productToAdd.id);
-    console.log(index + 'index');
     // if found increment quantity
-    if (index >= 0) {
+    if (parseInt(index) >= 0) {
         const item = cartItems[index];
         const newArray = [...cartItems];
 
