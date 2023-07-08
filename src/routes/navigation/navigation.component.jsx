@@ -1,12 +1,13 @@
 import { Outlet, Link } from "react-router-dom";
 import CrwnLogo from "../../assets/crown.svg"
-import "./navigation.styles.scss";
+import "./navigation.styles.jsx";
 import UserContext from "../../contexts/user.context";
 import { useContext } from "react";
 import { signOutUser } from "../../utils/firebase/firebase.utils";
 import CartIcon from "../../components/cart-icon/cart-icon.component";
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
 import CartContext from "../../contexts/cart.context";
+import { NavigationContainer, LogoContainer, NavLinksContainer, NavLink } from "./navigation.styles.jsx";
 
 const Navigation = () => {
 
@@ -20,21 +21,21 @@ const Navigation = () => {
 
     return (
         <>
-            <div className="navigation">
-                <Link className="logo-container" to='/'>
+            <NavigationContainer>
+                <LogoContainer to='/'>
                     <img src={CrwnLogo} className="logo" />
-                </Link>
-                <div className="nav-links-container">
+                </LogoContainer>
+                <NavLinksContainer>
                     <Link className="nav-link" to="/shop">SHOP</Link>
                     {
                         userCtx.currentUser ? 
                             <span className="nav-link" onClick={signOutHandler}>SIGN OUT</span>
-                            : <Link className="nav-link" to="/auth">SIGN IN</Link>
+                            : <NavLink className="nav-link" to="/auth">SIGN IN</NavLink>
                     }
                     <CartIcon onClick={cartCtx.toggleDropdown}/>
-                </div>
+                </NavLinksContainer>
                 {cartCtx.showDropdown && <CartDropdown />}
-            </div>
+            </NavigationContainer>
             <Outlet />
         </>
     )
