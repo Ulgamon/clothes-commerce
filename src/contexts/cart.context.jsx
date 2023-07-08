@@ -6,7 +6,7 @@ const addCartItem = (cartItems, productToAdd) => {
     // if found increment quantity
     if (parseInt(index) >= 0) {
         const item = cartItems[index];
-        const newArray = [...cartItems];
+        let newArray = [...cartItems];
 
         newArray[index] = {...item, quantity: item.quantity++}
 
